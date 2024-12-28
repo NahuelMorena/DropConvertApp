@@ -8,7 +8,7 @@ const Dropzone = (): JSX.Element => {
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const droppedFiles = Array.from(event.dataTransfer.files);
-        setFiles(droppedFiles)
+        setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
     };
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -24,7 +24,7 @@ const Dropzone = (): JSX.Element => {
     const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = event.target.files;
         if (selectedFiles) {
-            setFiles(Array.from(selectedFiles));
+            setFiles((prevFiles) => [...prevFiles, ...Array.from(selectedFiles)]);
         }
     };
 
@@ -33,6 +33,10 @@ const Dropzone = (): JSX.Element => {
             fileInputRef.current.click();
         }
     };
+
+    const removeFile = (fileToRemove: File) => {
+        setFiles((prevFiles) => prevFiles.filter(file => file !== fileToRemove))
+    }
 
     return (
         <div className='dropzone-container'>
@@ -54,13 +58,22 @@ const Dropzone = (): JSX.Element => {
                 />
             </div>
 
-            {files.length > 0 && (
-                <ul className="file-list">
-                    {files.map((file, index) => (
-                        <li key={index}>{file.name}</li>
-                    ))}
-                </ul>
-            )}
+            <div className="file-icons-container">
+                {files.map((file, index) => (
+                    <div key={index} className="file-icon">
+                        <div className="file-icon-inner">
+                            <span className="file-icon-text">{file.name}</span>
+                            <button
+                                className="remove-file-button"
+                                onClick={() => removeFile(file)}
+                            >
+                                X
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            
             <button className="process-button" onClick={processFiles}>
                 Procesar Archivos
             </button>
