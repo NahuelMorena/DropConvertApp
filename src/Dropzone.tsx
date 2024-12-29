@@ -1,5 +1,6 @@
 import './Dropzone.css';
 import { useState, useRef } from 'react';
+import { FaFileAlt } from 'react-icons/fa';
 
 const Dropzone = (): JSX.Element => {
     const [files, setFiles] = useState<File[]>([]);
@@ -46,9 +47,21 @@ const Dropzone = (): JSX.Element => {
                 onDragOver={handleDragOver}
                 onClick={handleClick}
             >
-                <p className='dropzone-text'>
-                    Arrastra tus archivos aquí o haz clic para seleccionarlos
-                </p>
+                {files.length === 0 ? (
+                    <p className='dropzone-text'>
+                        Arrastra tus archivos aquí o haz clic para seleccionarlos
+                    </p>
+                ) : (
+                    <div className="file-icons-preview">
+                        {files.map((file, index) => (
+                            <div key={index} className="file-icon">
+                                <FaFileAlt className="file-icon-image" />
+                                <span className='file-icon-name'>{file.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
+               
                 <input
                     type="file"
                     className="file-input"

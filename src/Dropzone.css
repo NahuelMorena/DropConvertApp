@@ -15,6 +15,12 @@
     background-color: #f9f9f9;
     position: relative;
     transition: background-color 0.3s ease;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
 .dropzone:hover {
@@ -26,6 +32,37 @@
     color: #333;
     font-weight: 500;
     margin-bottom: 10px;
+}
+
+.file-icons-preview {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.file-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+    width: 60px;
+}
+
+.file-icon .file-icon-image {
+    font-size: 24px;
+    color: #007bff;
+}
+
+.file-icon .file-icon-image {
+    margin-top: 5px;
+    word-wrap: break-word;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
 }
 
 .file-list {
@@ -45,11 +82,15 @@
     margin-top: 15px;
     padding: 10px 20px;
     background-color: #007bff;
-    color: while;
+    color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+}
+
+.file-icon-text {
+    color: white;
 }
 
 .process-button:hover {
