@@ -1,6 +1,7 @@
 import './Dropzone.css';
 import { useState, useRef } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
+import { concatenateFiles } from './utils/ConcatenateFiles';
 
 // Lista de formatos permitidos
 const ALLOWED_FILE_TYPES = ['.txt', '.csv', '.json'];
@@ -27,10 +28,29 @@ const Dropzone = (): JSX.Element => {
         setFiles((prevFiles) => [...prevFiles, ...validFiles]);
     };
 
-    const processFiles = () => {
-        files.forEach((file) => {
-            console.log(`Procesando : ${file.name}`);
-        });
+    const processFiles = async () => {
+        if (files.length === 0) {
+            console.log('No hay archivos para procesar');
+            return;
+        }
+
+        try {
+            const concatenatedContent = await concatenateFiles(files);
+            console.log('Archivo concatenado:', concatenatedContent)
+            
+            const blob = new Blob([concatenatedContent], {type: 'text/plain'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'concatenated_files.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            console.log('Archivo descargado exitosamente')
+        } catch (error) {
+            console.error('Error al procesar y/o descargar los archivos:', error);
+        }
     };
 
     const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
