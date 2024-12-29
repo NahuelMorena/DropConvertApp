@@ -21,6 +21,7 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+    overflow: hidden;
 }
 
 .dropzone:hover {
@@ -35,11 +36,36 @@
 }
 
 .file-icons-preview {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
     width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0 10px;
+}
+
+.remove-file-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    z-index: 10;
+}
+
+.remove-file-button:hover {
+    background-color: #ff1a1a;
 }
 
 .file-icon {
@@ -49,6 +75,7 @@
     font-size: 12px;
     color: #333;
     text-align: center;
+    position: relative;
     width: 80px;
 }
 

@@ -29,13 +29,17 @@ const Dropzone = (): JSX.Element => {
         }
     };
 
-    const handleClick = () => {
+    const handleClick = (event: React.MouseEvent) => {
+        if ((event.target as HTMLElement).classList.contains('remove-file-button')) {
+            return;
+        }
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
     };
 
-    const removeFile = (fileToRemove: File) => {
+    const removeFile = (fileToRemove: File, event: React.MouseEvent) => {
+        event.stopPropagation();
         setFiles((prevFiles) => prevFiles.filter(file => file !== fileToRemove))
     }
 
@@ -55,6 +59,12 @@ const Dropzone = (): JSX.Element => {
                     <div className="file-icons-preview">
                         {files.map((file, index) => (
                             <div key={index} className="file-icon">
+                                <button
+                                    className='remove-file-button'
+                                    onClick={(event) => removeFile(file, event)}
+                                >
+                                    x
+                                </button>
                                 <FaFileAlt style={{ fontSize: '60px', color: '#007bff' }} className="file-icon-image" />
                                 <span className='file-icon-name'>{file.name}</span>
                             </div>
@@ -69,22 +79,6 @@ const Dropzone = (): JSX.Element => {
                     ref={fileInputRef}
                     onChange={handleFileInputChange}
                 />
-            </div>
-
-            <div className="file-icons-container">
-                {files.map((file, index) => (
-                    <div key={index} className="file-icon">
-                        <div className="file-icon-inner">
-                            <span className="file-icon-text">{file.name}</span>
-                            <button
-                                className="remove-file-button"
-                                onClick={() => removeFile(file)}
-                            >
-                                X
-                            </button>
-                        </div>
-                    </div>
-                ))}
             </div>
             
             <button className="process-button" onClick={processFiles}>
