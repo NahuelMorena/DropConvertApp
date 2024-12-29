@@ -119,3 +119,11 @@
 .dropzone {
     cursor: pointer;
 }
+
+.error-message {
+    color: #ff4d4f;
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+}

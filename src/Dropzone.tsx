@@ -7,6 +7,7 @@ const ALLOWED_FILE_TYPES = ['.txt', '.csv', '.json'];
 
 const Dropzone = (): JSX.Element => {
     const [files, setFiles] = useState<File[]>([]);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
@@ -15,11 +16,15 @@ const Dropzone = (): JSX.Element => {
         const validFiles = droppedFiles.filter(file =>
             ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
         );
-        setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-    };
+        const invalidFiles = droppedFiles.filter(file =>
+            !ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
+        );
 
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
+        if (invalidFiles.length > 0) {
+            showErrorMessage('Formato de archivo no permitido.')
+        }
+
+        setFiles((prevFiles) => [...prevFiles, ...validFiles]);
     };
 
     const processFiles = () => {
@@ -34,6 +39,13 @@ const Dropzone = (): JSX.Element => {
             const validFiles = Array.from(selectedFiles).filter(file =>
                 ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
             );
+            const invalidFiles = Array.from(selectedFiles).filter(file =>
+                !ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
+            );
+
+            if (invalidFiles.length > 0) {
+                showErrorMessage('Formato de archivo no permitido.');
+            }
             setFiles((prevFiles) => [...prevFiles, ...validFiles]);
         }
     };
@@ -52,12 +64,17 @@ const Dropzone = (): JSX.Element => {
         setFiles((prevFiles) => prevFiles.filter(file => file !== fileToRemove))
     }
 
+    const showErrorMessage = (message: string) => {
+        setErrorMessage(message);
+        setTimeout(() => setErrorMessage(null), 3000)
+    };
+
     return (
         <div className='dropzone-container'>
             <div
                 className="dropzone"
                 onDrop={handleDrop}
-                onDragOver={handleDragOver}
+                onDragOver={(e) => e.preventDefault()}
                 onClick={handleClick}
             >
                 {files.length === 0 ? (
@@ -91,6 +108,8 @@ const Dropzone = (): JSX.Element => {
                 />
             </div>
             
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+
             <button className="process-button" onClick={processFiles}>
                 Procesar Archivos
             </button>
