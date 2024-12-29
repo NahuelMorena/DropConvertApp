@@ -55,7 +55,7 @@ const Dropzone = (): JSX.Element => {
                     <div className="file-icons-preview">
                         {files.map((file, index) => (
                             <div key={index} className="file-icon">
-                                <FaFileAlt className="file-icon-image" />
+                                <FaFileAlt style={{ fontSize: '60px', color: '#007bff' }} className="file-icon-image" />
                                 <span className='file-icon-name'>{file.name}</span>
                             </div>
                         ))}
