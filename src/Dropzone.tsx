@@ -2,6 +2,9 @@ import './Dropzone.css';
 import { useState, useRef } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
 
+// Lista de formatos permitidos
+const ALLOWED_FILE_TYPES = ['.txt', '.csv', '.json'];
+
 const Dropzone = (): JSX.Element => {
     const [files, setFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -9,7 +12,10 @@ const Dropzone = (): JSX.Element => {
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const droppedFiles = Array.from(event.dataTransfer.files);
-        setFiles((prevFiles) => [...prevFiles, ...droppedFiles]);
+        const validFiles = droppedFiles.filter(file =>
+            ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
+        );
+        setFiles((prevFiles) => [...prevFiles, ...validFiles]);
     };
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -25,7 +31,10 @@ const Dropzone = (): JSX.Element => {
     const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = event.target.files;
         if (selectedFiles) {
-            setFiles((prevFiles) => [...prevFiles, ...Array.from(selectedFiles)]);
+            const validFiles = Array.from(selectedFiles).filter(file =>
+                ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
+            );
+            setFiles((prevFiles) => [...prevFiles, ...validFiles]);
         }
     };
 
@@ -78,6 +87,7 @@ const Dropzone = (): JSX.Element => {
                     multiple
                     ref={fileInputRef}
                     onChange={handleFileInputChange}
+                    accept={ALLOWED_FILE_TYPES.join(',')}
                 />
             </div>
             
