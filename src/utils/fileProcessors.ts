@@ -31,42 +31,35 @@ function processData(data: any): string {
     } else if (typeof data === 'object' && data !== null) {
         return processObject(data);
     }
-    return `${data}\n`;
+    return `${data}`;
 }
 
 function processElement(element: any): string {
-    let result = '';
     if (Array.isArray(element)) {
-        element.forEach((item) => {
-            result += processElement(item);
-        });
+        return element.map(item => processElement(item)).join(' ');
     } else if (typeof element === 'object' && element !== null) {
-        result += processObject(element);
-    } else {
-        result += `${element}\n`;
-    }
-    return result;
+        return processObject(element);
+    } 
+    return `${element}`;
 }
 
 function processObject(obj: any): string {
-    let result = '';
+    let line = '';
     for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
             const value = obj[key];
 
             if (Array.isArray(value)) {
-                value.forEach((item) => {
-                    result += processElement(item);
-                });
+                line += value.map(item => processElement(item)).join(' ');
             }
             else if (typeof value === 'object' && value !== null) {
-                result += processObject(value);
+                line += processObject(value);
             } else {
-                result += `${value}\n`;
+                line += `${value} `
             }
         }
     }
-    return result;
+    return line.trim();
 }
 
 ////////////////////////////
