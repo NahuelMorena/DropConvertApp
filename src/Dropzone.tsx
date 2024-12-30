@@ -4,7 +4,7 @@ import { FaFileAlt } from 'react-icons/fa';
 import { concatenateFiles } from './utils/ConcatenateFiles';
 
 // Lista de formatos permitidos
-const ALLOWED_FILE_TYPES = ['.txt', '.csv', '.json'];
+const ALLOWED_FILE_TYPES = ['.txt', '.csv', '.json', '.xml'];
 
 const Dropzone = (): JSX.Element => {
     const [files, setFiles] = useState<File[]>([]);

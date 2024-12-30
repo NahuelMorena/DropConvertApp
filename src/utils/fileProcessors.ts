@@ -1,3 +1,5 @@
+import { XMLParser } from 'fast-xml-parser';
+
 // Procesador para texto plano
 export function processPlainText(file: File): Promise<string> {
     return file.text();
@@ -36,7 +38,7 @@ function processData(data: any): string {
 
 function processElement(element: any): string {
     if (Array.isArray(element)) {
-        return element.map(item => processElement(item)).join(' ');
+        return element.map(item => processElement(item)).join('\n');
     } else if (typeof element === 'object' && element !== null) {
         return processObject(element);
     } 
@@ -50,12 +52,12 @@ function processObject(obj: any): string {
             const value = obj[key];
 
             if (Array.isArray(value)) {
-                line += value.map(item => processElement(item)).join(' ');
+                line += value.map(item => processElement(item)).join('\n') + '\n';
             }
             else if (typeof value === 'object' && value !== null) {
-                line += processObject(value);
+                line += processObject(value) + '\n';
             } else {
-                line += `${value} `
+                line += `${value} `;
             }
         }
     }
@@ -70,11 +72,31 @@ export function processCSV(file: File): Promise<string> {
   
 // Procesador para XML
 export function processXML(file: File): Promise<string> {
-    return file.text();
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = async () => {
+            try {
+                const parser = new XMLParser();
+                const result = parser.parse(reader.result as string);
+                console.log(result);
+                const plainText = processData(result);
+                resolve(plainText);
+            } catch (error: unknown) {
+                if (error instanceof Error) {
+                    reject('Error al procesar XML: ' + error.message);
+                } else {
+                    reject('Error desconocido');
+                }
+            }
+        };
+        reader.onerror = (error) => reject(error);
+        reader.readAsText(file);
+    });
 }
 
 // Fábrica para seleccionar el procesador adecuado
 export function getFileProcessor(file: File) {
+    console.log(file.name.split('.').pop()?.toLowerCase())
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
   
     switch (fileExtension) {
