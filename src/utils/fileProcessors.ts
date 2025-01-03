@@ -28,40 +28,48 @@ export function processJSON(file: File): Promise<string> {
 }
   
 function processData(data: any): string {
-    if (Array.isArray(data)) {
-        return data.map((item) => processElement(item)).join('\n');
-    } else if (typeof data === 'object' && data !== null) {
-        return processObject(data);
-    }
-    return `${data}`;
-}
+    const rows: string[][] = [];
+    let headers: string[] = [];
+    function flatten(item: any, context: string[] = []): void {
+        if (Array.isArray(item)) {
+            item.forEach(subItem => flatten(subItem, context));
+        } else if (typeof item === 'object' && item !== null) {
+            let localContext: string[] = [...context];
+            for (const [key, value] of Object.entries(item)) {
+                if (Array.isArray(value)) {
+                    headers.push(...localContext);
+                    value.forEach(subItem => flatten(subItem, [...localContext]));
+                } else if (typeof value === 'object' && value !== null) {
+                    flatten(value, [...localContext, key]);
+                } else {
+                    localContext.push(String(value));
 
-function processElement(element: any): string {
-    if (Array.isArray(element)) {
-        return element.map(item => processElement(item)).join('\n');
-    } else if (typeof element === 'object' && element !== null) {
-        return processObject(element);
-    } 
-    return `${element}`;
-}
-
-function processObject(obj: any): string {
-    let line = '';
-    for (const key in obj) {
-        if (Object.prototype.hasOwnProperty.call(obj, key)) {
-            const value = obj[key];
-
-            if (Array.isArray(value)) {
-                line += value.map(item => processElement(item)).join('\n') + '\n';
+                }
             }
-            else if (typeof value === 'object' && value !== null) {
-                line += processObject(value) + '\n';
-            } else {
-                line += `${value} `;
+            if (localContext.some(item => !headers.includes(item))) {
+                rows.push(localContext);
             }
+        } else {
+            rows.push([...context, String(item)]);
         }
     }
-    return line.trim();
+    flatten(data);
+
+    // Filtrar filas incompletas o redundantes
+    const filteredRows = rows.filter(row => row.some(col => col.trim() !== ''));
+
+    // Determinar el ancho de cada columna
+    const columnWidths = filteredRows.reduce((widths, row) => {
+        row.forEach((col, i) => {
+            widths[i] = Math.max(widths[i] || 0, col.length);
+        });
+        return widths;
+    }, [] as number[]);
+
+    // Generar las filas formateadas
+    return rows.map(row => {
+        return row.map((col, i) => col.padEnd(columnWidths[i])).join('\t');
+    }).join('\n');        
 }
 
 ////////////////////////////
