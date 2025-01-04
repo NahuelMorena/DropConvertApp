@@ -1,6 +1,6 @@
 import { FileProcessor } from "./FileProcessor";
 
-export class XMLProcessor implements FileProcessor {
+export class XMLProcessor extends FileProcessor {
     async process(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -16,14 +16,10 @@ export class XMLProcessor implements FileProcessor {
                     const plainText = this.processNode(xmlDoc.documentElement);
                     resolve(plainText);
                 } catch (error: unknown) {
-                    if (error instanceof Error) {
-                        reject('Error al procesar XML: ' + error.message);
-                    } else {
-                        reject('Error desconocido');
-                    }
+                    this.handleError(error, reject, 'Error al procesar XML');
                 }
             };
-            reader.onerror = (error) => reject(error);
+            reader.onerror = (error) => this.handleError(error, reject, 'Error al leer archivo JSON');
             reader.readAsText(file);
         });
     }
@@ -58,21 +54,7 @@ export class XMLProcessor implements FileProcessor {
         }
     
         traverse(node);
-    
-        // Filtrar filas incompletas o redundantes
-        const filteredRows = rows.filter(row => row.some(col => col.trim() !== ''));
-    
-        // Determinar el ancho de cada columna
-        const columnWidths = filteredRows.reduce((widths, row) => {
-            row.forEach((col, i) => {
-                widths[i] = Math.max(widths[i] || 0, col.length);
-            });
-            return widths;
-        }, [] as number[]);
-    
-        // Generar las filas formateadas
-        return rows.map(row => {
-            return row.map((col, i) => col.padEnd(columnWidths[i])).join('\t');
-        }).join('\n'); 
+
+        return this.formatRows(rows, this.calculateColumnWidth(rows));
     }
 }

@@ -1,6 +1,6 @@
 import { FileProcessor } from "./FileProcessor";
 
-export class ARFFProcessor implements FileProcessor {
+export class ARFFProcessor extends FileProcessor {
     async process(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -43,15 +43,11 @@ export class ARFFProcessor implements FileProcessor {
                     const plainText = resultObject.data.map(row => row.join(' ')).join('\n');
                     resolve(plainText);
                 } catch (error: unknown) {
-                    if (error instanceof Error) {
-                        reject('Error al procesar ARFF: ' + error.message);
-                    } else {
-                        reject('Error desconocido');
-                    }
+                    this.handleError(error, reject, 'Error al procesar ARFF');
                 }
             };
     
-            reader.onerror = (error) => reject(error);
+            reader.onerror = (error) => this.handleError(error, reject, 'Error al leer archivo JSON');
             reader.readAsText(file);
         });
     }

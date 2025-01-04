@@ -1,23 +1,19 @@
 import { FileProcessor } from "./FileProcessor";
 
-export class JSONProcessor implements FileProcessor {
+export class JSONProcessor extends FileProcessor {
     async process(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = () => {
-              try {
-                const data = JSON.parse(reader.result as string);
-                const plainText = this.processData(data);
-                resolve(plainText)
-              } catch (error: unknown) {
-                  if (error instanceof Error) {
-                      reject('Error al procesar JSON: ' + error.message);
-                  } else {
-                      reject('Error desconocido');
-                  }
-              }
+                try {
+                    const data = JSON.parse(reader.result as string);
+                    const plainText = this.processData(data);
+                    resolve(plainText)
+                } catch (error: unknown) {
+                    this.handleError(error, reject, 'Error al procesar JSON');
+                }
             };
-            reader.onerror = (error) => reject(error);
+            reader.onerror = (error) => this.handleError(error, reject, 'Error al leer archivo JSON');
             reader.readAsText(file);
           });
     }
@@ -49,21 +45,7 @@ export class JSONProcessor implements FileProcessor {
             }
         }
         flatten(data);
-    
-        // Filtrar filas incompletas o redundantes
-        const filteredRows = rows.filter(row => row.some(col => col.trim() !== ''));
-    
-        // Determinar el ancho de cada columna
-        const columnWidths = filteredRows.reduce((widths, row) => {
-            row.forEach((col, i) => {
-                widths[i] = Math.max(widths[i] || 0, col.length);
-            });
-            return widths;
-        }, [] as number[]);
-    
-        // Generar las filas formateadas
-        return rows.map(row => {
-            return row.map((col, i) => col.padEnd(columnWidths[i])).join('\t');
-        }).join('\n');        
+        
+        return this.formatRows(rows, this.calculateColumnWidth(rows));
     }
 }
