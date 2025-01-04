@@ -15,8 +15,6 @@ Una aplicación web interactiva para cargar, procesar y convertir archivos de va
 2. [Uso](#uso)
 3. [Estructura del Proyecto](#estructura-del-proyecto)
 4. [Tecnologías Utilizadas](#tecnologías-utilizadas)
-5. [Contribución](#contribución)
-6. [Licencia](#licencia)
 
 ## 🛠 Instalación
 
