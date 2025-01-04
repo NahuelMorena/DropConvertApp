@@ -26,7 +26,7 @@ Una aplicación web interactiva para cargar, procesar y convertir archivos de va
 
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/file-processor-web-app.git
+   git clone git@github.com:NahuelMorena/PreprocessorFileApp.git
    cd file-processor-web-app
    ```
 2. Instala las dependencias:
