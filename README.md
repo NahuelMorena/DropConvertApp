@@ -1,50 +1,67 @@
-# React + TypeScript + Vite
+# File Processor Web App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Una aplicación web interactiva para cargar, procesar y convertir archivos de varios formatos a texto plano. Permite procesar múltiples archivos simultáneamente y descargar el resultado en un archivo concatenado.
 
-Currently, two official plugins are available:
+## 🚀 Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Arrastrar y soltar archivos**: Interfaz intuitiva para cargar archivos directamente desde tu explorador.
+- **Procesamiento múltiple**: Admite varios formatos de archivo, incluyendo `.txt`, `.csv`, `.json`, `.xml` y `.arff`.
+- **Descarga consolidada**: Combina todos los archivos procesados en un único archivo de texto plano.
+- **Fácil extensibilidad**: Implementación basada en un patrón de diseño estratégico para admitir nuevos formatos fácilmente.
 
-## Expanding the ESLint configuration
+## 📂 Tabla de Contenidos
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. [Instalación](#instalación)
+2. [Uso](#uso)
+3. [Estructura del Proyecto](#estructura-del-proyecto)
+4. [Tecnologías Utilizadas](#tecnologías-utilizadas)
 
-- Configure the top-level `parserOptions` property like this:
+## 🛠 Instalación
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Requisitos previos
+- [Node.js](https://nodejs.org/) (v16 o superior)
+- [Git](https://git-scm.com/)
+
+### Pasos para instalar
+
+1. Clona este repositorio:
+   ```bash
+   git clone git@github.com:NahuelMorena/PreprocessorFileApp.git
+   cd file-processor-web-app
+   ```
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
+3. Inicia el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
+## 🎮 Uso
+
+1. Abre la aplicación en tu navegador (normalmente en [http://localhost:5173](http://localhost:5173)).
+2. Arrastra o selecciona los archivos que deseas procesar.
+3. Haz clic en **"Procesar Archivos"** para generar y descargar el archivo consolidado en texto plano.
+
+## 🧱 Estructura del Proyecto
+
+```plaintext
+src/
+├── Dropzone.tsx/                  # Componente principal para cargar y procesar archivos.
+│           
+├── utils/
+│    ├── ConcatenateFiles.ts       # Utilidad para combinar archivos procesados.
+│    ├── FileProcessorContext.ts   # Contexto estratégico para ejecutar procesadores.
+│    └── processors/
+│        ├── FileProcessor.ts      # Procesador base (clase abstracta).
+│        ├── ARFFProcessor.ts      # Procesador para archivos .arff.
+│        ├── CSVProcessor.ts       # Procesador para archivos .csv.
+│        ├── JSONProcessor.ts      # Procesador para archivos .json.
+│        ├── XMLProcessor.ts       # Procesador para archivos .xml.
+│        └── PlainTextProcessor.ts # Procesador para archivos .txt.
 ```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## 🛠️ Tecnoligías Utilizadas
+- **[Vite](https://vitejs.dev/):** Herramienta para configuración rápida de proyectos web.
+- **React:** Biblioteca para construir interfaces de usuario.
+- **TypeScript:** Superset de JavaScript con tipado estático.
+- **FileReader API:** API para manejar archivos en el navegador.
