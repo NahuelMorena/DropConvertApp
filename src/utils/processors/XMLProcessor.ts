@@ -1,6 +1,9 @@
 import { FileProcessor } from "./FileProcessor";
 
 export class XMLProcessor extends FileProcessor {
+    private rows: string[][] = [];
+    private headers: string[] = [];
+    
     async process(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -13,8 +16,8 @@ export class XMLProcessor extends FileProcessor {
                         throw new Error("Error al parsear el XML");
                     }
     
-                    const plainText = this.processNode(xmlDoc.documentElement);
-                    resolve(plainText);
+                    this.processData(xmlDoc.documentElement);
+                    resolve(this.formatRows(this.rows, this.calculateColumnWidth(this.rows)));
                 } catch (error: unknown) {
                     this.handleError(error, reject, 'Error al procesar XML');
                 }
@@ -24,37 +27,28 @@ export class XMLProcessor extends FileProcessor {
         });
     }
 
-    private processNode(node: Element): string {
-        const rows: string[][] = [];
-        let headers: string[] = [];
+    private processData(element: Element, context: string[] = []): void {
+        const currentRow: string[] = [...context];
     
-        function traverse(element: Element, context: string[] = []): void {
-            const currentRow: string[] = [...context];
+        Array.from(element.attributes).forEach(attr => {
+            this.headers.push(attr.value);
+            currentRow.push(attr.value);
+        });
     
-            Array.from(element.attributes).forEach(attr => {
-                headers.push(attr.value);
-                currentRow.push(attr.value);
-            });
-    
-            Array.from(element.children).forEach(child => {
-                if (child.children.length > 0) {
-                    if (currentRow.length > 0){
-                        headers.push(currentRow[currentRow.length - 1]);
-                    }
-                    traverse(child, currentRow);
-                } else {
-                    const value = child.textContent?.trim();
-                    if (value) currentRow.push(value);
+        Array.from(element.children).forEach(child => {
+            if (child.children.length > 0) {
+                if (currentRow.length > 0){
+                    this.headers.push(currentRow[currentRow.length - 1]);
                 }
-            });
-    
-            if (currentRow.some(item => !headers.includes(item))) {
-                rows.push([...currentRow]);
+                this.processData(child, currentRow);
+            } else {
+                const value = child.textContent?.trim();
+                if (value) currentRow.push(value);
             }
-        }
+        });
     
-        traverse(node);
-
-        return this.formatRows(rows, this.calculateColumnWidth(rows));
+        if (currentRow.some(item => !this.headers.includes(item))) {
+            this.rows.push([...currentRow]);
+        }
     }
 }
