@@ -11,7 +11,7 @@ export async function concatenateFiles(files: File[]): Promise<string> {
         });
   
       const contents = await Promise.all(readPromises);
-      return contents.join('');
+      return contents.join('\n');
     } catch (error) {
       console.error('Error concatenando archivos:', error)
       throw error

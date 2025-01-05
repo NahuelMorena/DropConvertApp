@@ -3,7 +3,7 @@ import { FaGithub, FaEnvelope, FaShieldAlt } from 'react-icons/fa';
 const Footer = (): JSX.Element => {
     return (
         <footer className="footer">
-            <p>© 2025 Tu Nombre o Equipo. Todos los derechos reservados.</p>
+            <p>© 2025 - Desarrollado con Vite y React. Todos los derechos reservados.</p>
             <div className="footer-links">
                 <a href="https://github.com/NahuelMorena/PreprocessorFileApp" target="_blank" rel="noopener noreferrer">
                     <FaGithub size={20} /> GitHub
