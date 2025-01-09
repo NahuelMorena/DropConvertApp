@@ -1,6 +1,6 @@
 import { FileProcessor } from "./FileProcessor";
 
-export class PlainTextProcessor extends FileProcessor {
+export class TXTProcessor extends FileProcessor {
     async process(file: File): Promise<string> {
         return file.text();
     }

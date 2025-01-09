@@ -30,7 +30,7 @@ const Dropzone = (): JSX.Element => {
 
     const processFiles = async () => {
         if (files.length === 0) {
-            console.log('No hay archivos para procesar');
+            showErrorMessage('No hay archivos para procesar');
             return;
         }
 
@@ -49,7 +49,7 @@ const Dropzone = (): JSX.Element => {
             window.URL.revokeObjectURL(url);
             console.log('Archivo descargado exitosamente')
         } catch (error) {
-            console.error('Error al procesar y/o descargar los archivos:', error);
+            showErrorMessage('Error al procesar el archivo');
         }
     };
 

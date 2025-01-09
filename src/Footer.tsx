@@ -11,7 +11,7 @@ const Footer = (): JSX.Element => {
                 <a href="mailto:nahuel1morena1@gmail.com">
                     <FaEnvelope size={20} /> Contacto
                 </a>
-                <a href="/privacy-policy">
+                <a href="#">
                     <FaShieldAlt size={20} /> Política de Privacidad
                 </a>
             </div>

@@ -1,4 +1,4 @@
-import { PlainTextProcessor } from "./PlainTextProcessor";
+import { TXTProcessor } from "./TXTProcessor";
 import { JSONProcessor } from "./JSONProcessor";
 import { CSVProcessor } from "./CSVProcessor";
 import { XMLProcessor } from "./XMLProcessor";
@@ -9,7 +9,7 @@ export function getFileProcessor(file: File) {
   
     switch (fileExtension) {
       case 'txt':
-        return new PlainTextProcessor();
+        return new TXTProcessor();
       case 'json':
         return new JSONProcessor();
       case 'csv':
