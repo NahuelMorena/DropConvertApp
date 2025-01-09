@@ -47,7 +47,7 @@ export class ARFFProcessor extends FileProcessor {
                 }
             };
     
-            reader.onerror = (error) => this.handleError(error, reject, 'Error al leer archivo JSON');
+            reader.onerror = (error) => this.handleError(error, reject, 'Error al leer archivo ARFF');
             reader.readAsText(file);
         });
     }

@@ -22,7 +22,7 @@ export class XMLProcessor extends FileProcessor {
                     this.handleError(error, reject, 'Error al procesar XML');
                 }
             };
-            reader.onerror = (error) => this.handleError(error, reject, 'Error al leer archivo JSON');
+            reader.onerror = (error) => this.handleError(error, reject, 'Error al leer archivo XML');
             reader.readAsText(file);
         });
     }

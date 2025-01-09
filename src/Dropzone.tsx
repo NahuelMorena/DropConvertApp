@@ -49,7 +49,8 @@ const Dropzone = (): JSX.Element => {
             window.URL.revokeObjectURL(url);
             console.log('Archivo descargado exitosamente')
         } catch (error) {
-            showErrorMessage('Error al procesar el archivo');
+            const errorMessage = error instanceof Error ? error.message : 'Error desconocido al procesar los archivos';
+            showErrorMessage(errorMessage);
         }
     };
 

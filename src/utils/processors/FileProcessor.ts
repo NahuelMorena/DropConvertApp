@@ -19,11 +19,8 @@ export abstract class FileProcessor {
 
     // Método común para manejar errores
     protected handleError(error: unknown, reject: (reason?: any) => void, customMessage: string): void {
-        if (error instanceof Error) {
-            reject(`${customMessage}: ${error.message}`)
-        } else {
-            reject(`Error desconocido`);
-        }
+        const errorMessage = error instanceof Error ? `${customMessage}: ${error.message}` : customMessage;
+        reject(new Error(errorMessage));
     }
     
     //Metodo que debe implementar las clases hijas
