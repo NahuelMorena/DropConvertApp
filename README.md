@@ -60,10 +60,11 @@ src/
 │        ├── CSVProcessor.ts       # Procesador para archivos .csv.
 │        ├── JSONProcessor.ts      # Procesador para archivos .json.
 │        ├── XMLProcessor.ts       # Procesador para archivos .xml.
-│        └── PlainTextProcessor.ts # Procesador para archivos .txt.
+│        └── TXTProcessor.ts       # Procesador para archivos .txt.
 ```
 ## 🛠️ Tecnoligías Utilizadas
 - **[Vite](https://vitejs.dev/):** Herramienta para configuración rápida de proyectos web.
 - **React:** Biblioteca para construir interfaces de usuario.
 - **TypeScript:** Superset de JavaScript con tipado estático.
 - **FileReader API:** API para manejar archivos en el navegador.
+- **react-icons/fa:** Proporciona un conjunto de iconos de Font Awesome para usarlis fácilmente en proyectos React.
