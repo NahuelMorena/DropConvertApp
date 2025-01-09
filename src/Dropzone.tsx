@@ -11,6 +11,12 @@ const Dropzone = (): JSX.Element => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    /**
+     * Maneja el evento de arrastrar y soltar archivos en el área designada.
+     * Filtrar los archivos por su tipo permitido y actualizar la lista de archivos válidos.
+     * Muestra un mensaje de error si se detectan archivos no válidos.
+     * @param event Evento de arrastre (DragEvent) que contiene los archivos arrastrados.
+     */
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const droppedFiles = Array.from(event.dataTransfer.files);
@@ -28,6 +34,10 @@ const Dropzone = (): JSX.Element => {
         setFiles((prevFiles) => [...prevFiles, ...validFiles]);
     };
 
+    /**
+     * Procesa los archivos seleccionados, concatenándolos en un archivo de texto plano.
+     * Descarga el archivo resultante o muestra un mensaje de error en caso de fallo.
+     */
     const processFiles = async () => {
         if (files.length === 0) {
             showErrorMessage('No hay archivos para procesar');
@@ -54,6 +64,11 @@ const Dropzone = (): JSX.Element => {
         }
     };
 
+    /**
+     * Maneja el cambio en el selector de archivos, filtrando por tipos permitidos.
+     * Actualiza la lista de archivos válidos y muestra un mensaje de error para los archivos no válidos.
+     * @param event Evento de cambio (ChangeEvent) que contiene los archivos seleccionados.
+     */
     const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = event.target.files;
         if (selectedFiles) {
@@ -71,6 +86,11 @@ const Dropzone = (): JSX.Element => {
         }
     };
 
+    /**
+     * Maneja el clic sobre el contenedor, abriendo el selector de archivos a menos que 
+     * se haga clic en un botón de eliminación.
+     * @param event Evento de clic (MouseEvent) capturado en el contenedor.
+     */
     const handleClick = (event: React.MouseEvent) => {
         if ((event.target as HTMLElement).classList.contains('remove-file-button')) {
             return;
@@ -80,11 +100,20 @@ const Dropzone = (): JSX.Element => {
         }
     };
 
+    /**
+     * Elimina un archivo específico de la lista de archivos seleccionados.
+     * @param fileToRemove Archivo que será eliminado.
+     * @param event Evento de clic (MouseEvent) que desencadena la eliminación.
+     */
     const removeFile = (fileToRemove: File, event: React.MouseEvent) => {
         event.stopPropagation();
         setFiles((prevFiles) => prevFiles.filter(file => file !== fileToRemove))
     }
 
+    /**
+     * Muestra un mensaje de error en la interfaz durante un tiempo determinado.
+     * @param message Mensaje de error a mostrar.
+     */
     const showErrorMessage = (message: string) => {
         setErrorMessage(message);
         setTimeout(() => setErrorMessage(null), 3000)
