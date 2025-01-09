@@ -12,6 +12,29 @@ const Dropzone = (): JSX.Element => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     /**
+     * Filtra los archivos seleccionados en válidos e inválidos según los formatos permitidos.
+     * Muestra un mensaje de error si hay archivos inválidos.
+     * @param inputFiles Archivo a procesar.
+     * @returns Archivos válidos.
+     */
+    const filterFiles = (inputFiles: FileList | File[]): File[] => {
+        const fileArray = Array.isArray(inputFiles) ? inputFiles : Array.from(inputFiles);
+        const invalidFiles = fileArray.filter(file => 
+            !ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
+        );
+
+        if (invalidFiles.length > 0) {
+            showErrorMessage('Formato de archivo no permitido.');
+        }
+
+        const validFiles = fileArray.filter(file => 
+            ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
+        );
+
+        return validFiles;
+    };
+
+    /**
      * Maneja el evento de arrastrar y soltar archivos en el área designada.
      * Filtrar los archivos por su tipo permitido y actualizar la lista de archivos válidos.
      * Muestra un mensaje de error si se detectan archivos no válidos.
@@ -19,19 +42,20 @@ const Dropzone = (): JSX.Element => {
      */
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        const droppedFiles = Array.from(event.dataTransfer.files);
-        const validFiles = droppedFiles.filter(file =>
-            ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
-        );
-        const invalidFiles = droppedFiles.filter(file =>
-            !ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
-        );
-
-        if (invalidFiles.length > 0) {
-            showErrorMessage('Formato de archivo no permitido.')
-        }
-
+        const validFiles = filterFiles(event.dataTransfer.files);
         setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+    };
+
+     /**
+     * Maneja el cambio en el selector de archivos, filtrando por tipos permitidos.
+     * Actualiza la lista de archivos válidos y muestra un mensaje de error para los archivos no válidos.
+     * @param event Evento de cambio (ChangeEvent) que contiene los archivos seleccionados.
+     */
+     const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const validFiles = filterFiles(event.target.files)
+            setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+        }
     };
 
     /**
@@ -65,28 +89,6 @@ const Dropzone = (): JSX.Element => {
     };
 
     /**
-     * Maneja el cambio en el selector de archivos, filtrando por tipos permitidos.
-     * Actualiza la lista de archivos válidos y muestra un mensaje de error para los archivos no válidos.
-     * @param event Evento de cambio (ChangeEvent) que contiene los archivos seleccionados.
-     */
-    const handleFileInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFiles = event.target.files;
-        if (selectedFiles) {
-            const validFiles = Array.from(selectedFiles).filter(file =>
-                ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
-            );
-            const invalidFiles = Array.from(selectedFiles).filter(file =>
-                !ALLOWED_FILE_TYPES.some(type => file.name.endsWith(type))
-            );
-
-            if (invalidFiles.length > 0) {
-                showErrorMessage('Formato de archivo no permitido.');
-            }
-            setFiles((prevFiles) => [...prevFiles, ...validFiles]);
-        }
-    };
-
-    /**
      * Maneja el clic sobre el contenedor, abriendo el selector de archivos a menos que 
      * se haga clic en un botón de eliminación.
      * @param event Evento de clic (MouseEvent) capturado en el contenedor.
@@ -95,9 +97,7 @@ const Dropzone = (): JSX.Element => {
         if ((event.target as HTMLElement).classList.contains('remove-file-button')) {
             return;
         }
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
+        fileInputRef.current?.click();
     };
 
     /**
