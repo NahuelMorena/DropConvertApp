@@ -4,6 +4,12 @@ Una aplicación web interactiva para cargar, procesar y convertir archivos de va
 
 Puedes probar la pagina desplegada aqui [https://nahuelmorena.github.io/PreprocessorFileApp/](https://nahuelmorena.github.io/PreprocessorFileApp/)
 
+## Interfaz de la App
+<p align="center">
+    <img src="/public/interfaz.png" alt="Vista de la interfaz de la App" width="700">
+</p>
+<p align="center"><i>Figura 1. Vista de la interfaz de la App</i></p>
+
 ## 🚀 Características
 
 - **Arrastrar y soltar archivos**: Interfaz intuitiva para cargar archivos directamente desde tu explorador.
