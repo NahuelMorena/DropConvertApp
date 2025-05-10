@@ -1,4 +1,4 @@
-# File Processor Web App
+# DropConvertApp
 
 Una aplicación web interactiva para cargar, procesar y convertir archivos de varios formatos a texto plano. Permite procesar múltiples archivos simultáneamente y descargar el resultado en un archivo concatenado.
 
