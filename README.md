@@ -2,7 +2,7 @@
 
 Una aplicación web interactiva para cargar, procesar y convertir archivos de varios formatos a texto plano. Permite procesar múltiples archivos simultáneamente y descargar el resultado en un archivo concatenado.
 
-Puedes probar la pagina desplegada aqui [https://nahuelmorena.github.io/PreprocessorFileApp/](https://nahuelmorena.github.io/PreprocessorFileApp/)
+Puedes probar la pagina desplegada aqui [https://nahuelmorena.github.io/DropConvertApp/](https://nahuelmorena.github.io/DropConvertApp/)
 
 ## Interfaz de la App
 <p align="center">
@@ -34,8 +34,8 @@ Puedes probar la pagina desplegada aqui [https://nahuelmorena.github.io/Preproce
 
 1. Clona este repositorio:
    ```bash
-   git clone git@github.com:NahuelMorena/PreprocessorFileApp.git
-   cd file-processor-web-app
+   git clone git@github.com:NahuelMorena/DropConvertApp.git
+   cd DropConvertApp
    ```
 2. Instala las dependencias:
    ```bash
